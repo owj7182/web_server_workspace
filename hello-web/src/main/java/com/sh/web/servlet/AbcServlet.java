@@ -20,7 +20,7 @@ public class AbcServlet extends HttpServlet {
 		
 		// 리다이렉트
 		// 클라이언트에게 location으로 재요청을 지시
-		response.sendRedirect("/hello-web/xyz.do");
+		response.sendRedirect(request.getContextPath() + "/xyz.do"); // /hello-web
 	}
 
 }

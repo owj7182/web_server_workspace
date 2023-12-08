@@ -35,7 +35,9 @@
 		<li><a href="${pageContext.request.contextPath}/el.do?name=아이패드&option=red&option=128">EL</a></li>
 		<li><a href="${pageContext.request.contextPath}/jstl.do?name=아이패드&option=red&option=128">JSTL</a></li>
 	</ul>
-	
+	<ul>
+		<li><a href="${pageContext.request.contextPath}/jspTest.do">EL/Jstl실습문제</a></li>
+	</ul>
 	
 </body>
 </html>

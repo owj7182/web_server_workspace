@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.fail;
  * JUnit 테스트 구성요소
  * 1. fixture method : 매 테스트 전후작업
  *  - 모든 테스트는 독립적으로 진행(매번 새로운 테스트 객체를 생성후 진행)
- *  - @BeforeAll, @AfterAll
+ *  - @BeforeAll, @AfterAll (static)
  *  - @BeforeEach, @AfterEach
  *
  * 2. 단정문 (assertion)

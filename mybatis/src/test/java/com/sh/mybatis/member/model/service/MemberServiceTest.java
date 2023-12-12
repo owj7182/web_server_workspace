@@ -3,10 +3,7 @@ package com.sh.mybatis.member.model.service;
 import com.sh.mybatis.member.model.entity.Gender;
 import com.sh.mybatis.member.model.entity.Member;
 import com.sh.mybatis.member.model.entity.Role;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -14,7 +11,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MemberServiceTest {
     MemberService memberService;
 
@@ -100,7 +97,8 @@ public class MemberServiceTest {
         });
     }
 
-    @Disabled
+//    @Disabled
+    @Order(1)
     @DisplayName("회원가입")
     @Test
     public void test7() {
@@ -119,6 +117,7 @@ public class MemberServiceTest {
         assertThat(member2.getName()).isEqualTo(name);
     }
 
+    @Order(2)
     @DisplayName("회원가입시 오류 체크")
     @Test
     public void test8() {
@@ -130,7 +129,8 @@ public class MemberServiceTest {
         assertThat(th).isInstanceOf(Exception.class);
     }
 
-    @Disabled
+//    @Disabled
+    @Order(3)
     @DisplayName("회원정보 수정")
     @Test
     public void test9() {
@@ -159,7 +159,8 @@ public class MemberServiceTest {
         assertThat(member2.getPhone()).isEqualTo(newPhone);
     }
 
-    @Disabled
+//    @Disabled
+    @Order(4)
     @DisplayName("회원 비밀번호 수정")
     @Test
     public void test10(){
@@ -176,7 +177,8 @@ public class MemberServiceTest {
         assertThat(member2.getPassword()).isEqualTo(newPassword);
     }
 
-    @Disabled
+//    @Disabled
+    @Order(5)
     @DisplayName("회원 권한 수정")
     @Test
     public void test11() {
@@ -193,7 +195,8 @@ public class MemberServiceTest {
         assertThat(member2.getRole()).isEqualTo(newRole);
     }
 
-    @Disabled
+//    @Disabled
+    @Order(6)
     @DisplayName("회원 삭제")
     @Test
     public void test12() {

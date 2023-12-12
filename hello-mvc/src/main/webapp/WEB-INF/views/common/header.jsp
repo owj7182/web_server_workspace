@@ -14,8 +14,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="${pageContext.request.contextPath}/js/tailwind.config.js"></script>
     <script>
-
-
+        <c:if test="${msg != null}">
+            alert("${msg}");
+            <%-- session속성 msg 제거해서 1회만 출력되도록 한다. --%>
+            <%-- session.removeAttribute("msg"); --%>
+            <c:remove var="msg" scope="session" />
+        </c:if>
     </script>
 </head>
 <body>
@@ -28,9 +32,14 @@
                     <span class="self-center text-2xl font-semibold whitespace-nowrap">Hello MVC</span>
                 </a>
                 <div class="flex items-center space-x-6 rtl:space-x-reverse">
-
-                    <a href="${pageContext.request.contextPath}/member/memberLogin" class="text-md text-gray-600 hover:underline">로그인</a>
-                    <a href="${pageContext.request.contextPath}/member/memberRegister" class="text-md text-gray-500 hover:underline">회원가입</a>
+                    <c:if test="${loginMember == null}">
+                        <a href="${pageContext.request.contextPath}/member/memberLogin" class="text-md text-gray-600 hover:underline">로그인</a>
+                        <a href="${pageContext.request.contextPath}/member/memberRegister" class="text-md text-gray-500 hover:underline">회원가입</a>
+                    </c:if>
+                    <c:if test="${loginMember != null}">
+                        <a href="${pageContext.request.contextPath}/member/memberDetail" class="text-md text-gray-600 hover:underline">${loginMember.id}</a>님, 안녕하세요😁
+                        <a href="${pageContext.request.contextPath}/member/memberLogout" class="text-md text-gray-500 hover:underline">로그아웃</a>
+                    </c:if>
 
 
                 </div>

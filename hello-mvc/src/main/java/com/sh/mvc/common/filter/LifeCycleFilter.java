@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * <pre>
  * Filter의 생명주기
  *  - 서버구동시 Filter객체를 만들고, 그 이후 해당객체를 재사용(싱글턴)한다.
  * 1. 생성자 호출
@@ -18,6 +19,7 @@ import java.io.IOException;
  *  - HttpFilter#doFilter(HttpServletRequest, HttpServletResponse, FilterChain)
  *
  * 4. destroy 호출
+ * </pre>
  */
 //@WebFilter("/*")
 public class LifeCycleFilter extends HttpFilter {

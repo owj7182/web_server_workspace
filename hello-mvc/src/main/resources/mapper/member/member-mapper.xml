@@ -6,20 +6,19 @@
     <!--
         #{id} 전달된 id값으로 치환
         id 태그식별자
-        resultType ResultSet 한행이 변환될 타입(fullname | alias)
-     -->
+        resultType ResultSet한행이 변환될 타입(fullname | alias)
+    -->
     <select id="findById" resultType="member">
         select
             *
         from
             member
         where
-            id = #{id}
+            id=#{id}
     </select>
-
     <!--
         resultType속성은 한행과 매칭되는 타입 작성
-    -->
+     -->
     <select id="findAll" resultType="member">
         select
             *
@@ -36,6 +35,7 @@
             member
         where
             name like '%' || #{name} || '%'
+
     </select>
 
     <select id="findByGender" resultType="member">
@@ -45,14 +45,18 @@
             member
         where
             gender = #{gender}
+
     </select>
+
     <insert id="insertMember">
         insert into
             member
         values (
-            #{id}, #{password}, #{name}, #{role}, #{gender}, #{birthday}, #{email}, #{phone}, #{hobby, typeHandler=listStringTypeHandler}, default, default
-        )
+            #{id}, #{password}, #{name}, #{role}, #{gender}, #{birthday}, #{email}, #{phone},
+            #{hobby, typeHandler=listStringTypeHandler}, default, default
+            )
     </insert>
+
     <update id="updateMember">
         update
             member
@@ -66,7 +70,6 @@
         where
             id = #{id}
     </update>
-
     <update id="updateMemberPassword">
         update
             member
@@ -75,8 +78,7 @@
         where
             id = #{id}
     </update>
-
-    <update id="member.updateMemberRole">
+    <update id="updateMemberRole">
         update
             member
         set
@@ -84,7 +86,6 @@
         where
             id = #{id}
     </update>
-
     <delete id="deleteMember">
         delete from
             member
@@ -99,6 +100,27 @@
             member
         where
             ${searchType} like '%' || #{searchKeyword} || '%'
-
+    </select>
+    <select id="findAllPage" resultType="member">
+        select
+            *
+        from
+            member
+        order by
+            reg_date desc
+    </select>
+    <select id="getTotalCount" resultType="_int">
+        select
+            count(*)
+        from
+            member
+    </select>
+    <select id="getTotalCount2" resultType="_int">
+        select
+            count(*)
+        from
+            member
+        where
+            ${searchType} like '%' || #{searchKeyword} || '%'
     </select>
 </mapper>

@@ -13,30 +13,30 @@ import static com.sh.mvc.common.SqlSessionTemplate.getSqlSession;
 public class MemberService {
     private MemberDao memberDao = new MemberDao();
 
-    public Member findById(String id) {
+    public Member findById(String id){
         SqlSession session = getSqlSession();
         Member member = memberDao.findById(session, id);
         session.close();
-        return member;
+        return  member;
     }
 
     public List<Member> findAll() {
         SqlSession session = getSqlSession();
         List<Member> members = memberDao.findAll(session);
         session.close();
-        return members;
+        return  members;
     }
 
     public List<Member> findByName(String name) {
         SqlSession session = getSqlSession();
-        List<Member> members = memberDao.findByName(session, name);
+        List<Member> members = memberDao.findByName(session,name);
         session.close();
         return members;
     }
 
     public List<Member> findByGender(String gender) {
         SqlSession session = getSqlSession();
-        List<Member> members = memberDao.findByGender(session, gender);
+        List<Member> members = memberDao.findByGender(session,gender);
         session.close();
         return members;
     }
@@ -47,12 +47,13 @@ public class MemberService {
         try {
             result = memberDao.insertMember(session, member);
             session.commit();
-        } catch (Exception e) {
+        } catch (Exception e){
             session.rollback();
             throw e;
         } finally {
             session.close();
         }
+
         return result;
     }
 
@@ -62,10 +63,10 @@ public class MemberService {
         try {
             result = memberDao.updateMember(session, member);
             session.commit();
-        }catch (Exception e) {
+        } catch (Exception e){
             session.rollback();
             throw e;
-        }finally {
+        } finally {
             session.close();
         }
         return result;
@@ -74,13 +75,13 @@ public class MemberService {
     public int updateMemberPassword(Member member) {
         int result = 0;
         SqlSession session = getSqlSession();
-        try{
+        try {
             result = memberDao.updateMemberPassword(session, member);
             session.commit();
-        } catch (Exception e) {
+        } catch (Exception e){
             session.rollback();
             throw e;
-        }finally {
+        } finally {
             session.close();
         }
         return result;
@@ -89,10 +90,10 @@ public class MemberService {
     public int updateMemberRole(Member member) {
         int result = 0;
         SqlSession session = getSqlSession();
-        try{
+        try {
             result = memberDao.updateMemberRole(session, member);
             session.commit();
-        } catch (Exception e) {
+        } catch (Exception e){
             session.rollback();
             throw e;
         } finally {
@@ -104,10 +105,10 @@ public class MemberService {
     public int deleteMember(String id) {
         int result = 0;
         SqlSession session = getSqlSession();
-        try{
+        try {
             result = memberDao.deleteMember(session, id);
             session.commit();
-        } catch (Exception e) {
+        } catch (Exception e){
             session.rollback();
             throw e;
         } finally {
@@ -121,5 +122,26 @@ public class MemberService {
         List<Member> members = memberDao.searchMember(session, param);
         session.close();
         return members;
+    }
+
+    public List<Member> findAll(Map<String, Object> param) {
+        SqlSession session = getSqlSession();
+        List<Member> members = memberDao.findAll(session, param);
+        session.close();
+        return members;
+    }
+
+    public int getTotalCount() {
+        SqlSession session = getSqlSession();
+        int totalCount = memberDao.getTotalCount(session);
+        session.close();
+        return totalCount;
+    }
+
+    public int getTotalCount(Map<String, Object> param) {
+        SqlSession session = getSqlSession();
+        int totalCount = memberDao.getTotalCount(session, param);
+        session.close();
+        return totalCount;
     }
 }

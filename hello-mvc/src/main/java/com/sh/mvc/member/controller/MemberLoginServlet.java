@@ -68,14 +68,14 @@ public class MemberLoginServlet extends HttpServlet {
         // 2. 사용자 입력값 가져오기
         String id = req.getParameter("id");
         String password = HelloMvcUtils.getEncryptedPassword(req.getParameter("password"), id);
-        System.out.println(id + ", " + password);
+//        System.out.println(id + ", " + password);
 
         // 3. 업무로직 (이번요청에 처리할 작업) -> 로그인(인증)
         // id/password - db에서 읽어온 데이터(member객체) 비교
         // 로그인 성공 (id/password 모두 일치)
         // 로그인 실패 (존재하지 않는 id | password가 틀린 경우)
         Member member = memberService.findById(id);
-        System.out.println(member);
+//        System.out.println(member);
 
         // 세션생성/가져오기
         // getSession(), getSession(true) : 세션이 존재하지 않으면 생성, 존재하는 세션을 반환

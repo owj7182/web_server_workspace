@@ -143,4 +143,8 @@ public class HelloMvcUtils {
         }
         return pagebar.toString();
     }
+
+    public static String convertLineFeedToBr(String str) {
+        return str.replaceAll("\n", "<br/>");
+    }
 }

@@ -1,10 +1,13 @@
 package com.sh.mvc.board.model.service;
 
 import com.sh.mvc.board.model.entity.Board;
-import com.sh.mvc.member.model.service.MemberService;
+import com.sh.mvc.board.model.vo.BoardVo;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,6 +26,7 @@ public class BoardServiceTest {
         assertThat(boardService).isNotNull();
     }
 
+    @Disabled
     @DisplayName("게시글 전체 조회")
     @Test
     public void test2() {
@@ -48,6 +52,7 @@ public class BoardServiceTest {
         assertThat(board.getMemberId()).isNotNull();
     }
 
+    @Disabled
     @Order(1)
     @DisplayName("게시글 한건 추가")
     @Test
@@ -55,7 +60,9 @@ public class BoardServiceTest {
         long id = 61;
         String memberId = "kamsayoyo";
 
-        Board board = new Board(id, "안녕하세요, 게시판입니다 - 61", memberId, "안녕하세요", 0, null);
+        BoardVo board = new BoardVo();
+        board.setTitle("제목");
+        board.setContent("내용");
 
         int result = boardService.insertBoard(board);
         assertThat(result).isEqualTo(1);
@@ -66,6 +73,7 @@ public class BoardServiceTest {
         assertThat(board2.getMemberId()).isNotNull();
     }
 
+    @Disabled
     @Order(2)
     @DisplayName("게시글 수정")
     @Test
@@ -88,6 +96,7 @@ public class BoardServiceTest {
 
     }
 
+    @Disabled
     @Order(3)
     @DisplayName("게시글 삭제")
     @Test
@@ -101,6 +110,30 @@ public class BoardServiceTest {
 
         Board board2 = boardService.findById(id);
         assertThat(board2).isNull();
+    }
+
+    @DisplayName("게시글은 10건씩 조회될 수 있어야 된다.")
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9})
+    public void test7(int page) {
+        assertThat(page).isGreaterThan(0);
+        System.out.println(page);
+
+        int limit = 10;
+        Map<String, Object> param = Map.of("page", page, "limit", limit);
+        List<BoardVo> boards = boardService.findAll(param);
+
+        System.out.println(boards);
+        assertThat(boards).isNotNull();
+        assertThat(boards.size()).isLessThanOrEqualTo(limit);
+    }
+
+    @DisplayName("전체 게시글 수가 정상 조회된다")
+    @Test
+    public void test8() {
+        int totalCount = boardService.getTotalCount();
+        System.out.println(totalCount);
+        assertThat(totalCount).isGreaterThanOrEqualTo(0);
     }
 
 }

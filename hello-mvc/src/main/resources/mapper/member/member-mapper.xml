@@ -106,14 +106,28 @@
             *
         from
             member
+        <if test="searchType != null and searchType != '' and searchKeyword != null and searchKeyword != '' ">
+        where
+            ${searchType} like '%' || #{searchKeyword} || '%'
+        </if>
         order by
             reg_date desc
     </select>
+    <!--
+        where 태그 하위 if구문이 하나라도 실행될때만 where절을 작성한다.
+         - where 다음에 and/or 연산자가 나오면 삭제 처리
+         - 여러개의 if구문 처리에 적합하다.
+    -->
     <select id="getTotalCount" resultType="_int">
         select
             count(*)
         from
             member
+        <where>
+            <if test="searchType != null and searchType != '' and searchKeyword != null and searchKeyword != '' ">
+                ${searchType} like '%' || #{searchKeyword} || '%'
+            </if>
+        </where>
     </select>
     <select id="getTotalCount2" resultType="_int">
         select

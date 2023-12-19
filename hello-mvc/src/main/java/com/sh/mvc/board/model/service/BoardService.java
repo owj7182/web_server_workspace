@@ -1,10 +1,13 @@
 package com.sh.mvc.board.model.service;
 
 import com.sh.mvc.board.model.dao.BoardDao;
+import com.sh.mvc.board.model.entity.Attachment;
 import com.sh.mvc.board.model.entity.Board;
+import com.sh.mvc.board.model.vo.BoardVo;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.sh.mvc.common.SqlSessionTemplate.getSqlSession;
 
@@ -17,18 +20,30 @@ public class BoardService {
         return boards;
     }
 
-    public Board findById(long id) {
+    public BoardVo findById(long id) {
         SqlSession session = getSqlSession();
-        Board board = boardDao.findById(session, id);
+        BoardVo board = boardDao.findById(session, id);
         session.close();
         return board;
     }
 
-    public int insertBoard(Board board) {
+    public int insertBoard(BoardVo board) {
         int result = 0;
         SqlSession session = getSqlSession();
         try {
+            // board 테이블에 등록
             result = boardDao.insertBoard(session, board);
+            System.out.println("BoardService#insertBoard : board#id = " + board.getId());
+
+            // attachment 테이블에 등록
+            List<Attachment> attachments = board.getAttachments();
+            if(!attachments.isEmpty()) {
+                for (Attachment attach : attachments) {
+                    attach.setBoardId(board.getId()); // fk boardId 필드값 대입
+                    result = boardDao.insertAttachment(session, attach);
+                }
+            }
+
             session.commit();
         } catch (Exception e) {
             session.rollback();
@@ -68,5 +83,19 @@ public class BoardService {
             session.close();
         }
         return result;
+    }
+
+    public List<BoardVo> findAll(Map<String, Object> param) {
+        SqlSession session = getSqlSession();
+        List<BoardVo> boards = boardDao.findAll(session, param);
+        session.close();
+        return boards;
+    }
+
+    public int getTotalCount() {
+        SqlSession session = getSqlSession();
+        int totalCount = boardDao.getTotalCount(session);
+        session.close();
+        return totalCount;
     }
 }

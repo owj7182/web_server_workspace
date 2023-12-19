@@ -10,26 +10,30 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet("/admin/searchMember")
-public class AdminSearchMemberServlet extends HttpServlet {
+/**
+ * <pre>
+ * 페이징
+ * 1. content
+ *  - page 현재페이지
+ *  - limit 한 페이지당 표시할 개체수
+ *
+ * 2. pagebar
+ *  - page 현재페이지
+ *  - limit 한 페이지당 표시할 개체수
+ *  - totalCount 전체 개체수
+ *  - totalPage 전체 페이지수
+ *  - pagebarSize 페이지바의 숫자개수
+ *  - pageNo 페이지 증감변수
+ *  - pagebarStart | pagebarEnd 페이지 증감변수의 범위
+ *  - url 요청 url
+ * </pre>
+ */
+//@WebServlet("/admin/memberList")
+public class _AdminMemberListServlet extends HttpServlet {
     private MemberService memberService = new MemberService();
-
-    /**
-     * mybatis에서는 식별자(컬럼명, 테이블명)를 동적으로 작성할 수 있다. ${식별자}
-     *  - (PreparedStatement에는 없음)
-     *
-     * select * from member where id like ?
-     * select * from member where name like ?
-     * select * from member where email like ?
-     * @param req
-     * @param resp
-     * @throws ServletException
-     * @throws IOException
-     */
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -39,25 +43,16 @@ public class AdminSearchMemberServlet extends HttpServlet {
         try {
             page = Integer.parseInt(req.getParameter("page"));
         } catch (NumberFormatException ignore) {}
-
-        String searchType = req.getParameter("search-type");
-        String searchKeyword = req.getParameter("search-keyword");
-
-        Map<String, Object> param = new HashMap<>();
-        param.put("searchType", searchType);
-        param.put("searchKeyword", searchKeyword);
-        param.put("page", page);
-        param.put("limit", limit);
+        Map<String, Object> param = Map.of("page", page, "limit", limit);
         System.out.println(param);
 
         // 2. 업무로직
-        // content영역
-        List<Member> members = memberService.searchMember(param);
+        List<Member> members = memberService.findAll(param);
         req.setAttribute("members", members);
 
-        // pagebar영역
-        int totalCount = memberService.getTotalCount(param); // 검색 조건에 맞는 총 회원수
-        String url = req.getRequestURI() + "?search-type=" + searchType + "&search-keyword=" + searchKeyword;
+        // 페이지바 작업
+        int totalCount = memberService.getTotalCount();
+        String url = req.getRequestURI();
         String pagebar = HelloMvcUtils.getPagebar(page, limit, totalCount, url);
         req.setAttribute("pagebar", pagebar);
 

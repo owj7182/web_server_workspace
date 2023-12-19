@@ -2,6 +2,10 @@ package com.sh.mvc.board.model.entity;
 
 import java.time.LocalDateTime;
 
+/**
+ * entity 클래스
+ *  - db 테이블과 매칭되는 클래스
+ */
 public class Board {
     private long id;
     private String title;
@@ -80,5 +84,14 @@ public class Board {
                 ", readCount=" + readCount +
                 ", regDate=" + regDate +
                 '}';
+    }
+
+    public void setValue(String name, String value) {
+        switch (name) {
+            case "title" : this.title = value; break;
+            case "memberId" : this.memberId = value; break;
+            case "content" : this.content = value; break;
+            default: throw new RuntimeException("부적절한 name값 : " + name);
+        }
     }
 }

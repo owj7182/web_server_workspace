@@ -1,9 +1,7 @@
 package com.sh.mvc.admin.controller;
 
 import com.sh.mvc.common.HelloMvcUtils;
-import com.sh.mvc.member.model.entity.Gender;
 import com.sh.mvc.member.model.entity.Member;
-import com.sh.mvc.member.model.entity.Role;
 import com.sh.mvc.member.model.service.MemberService;
 
 import javax.servlet.ServletException;
@@ -12,34 +10,26 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * <pre>
- * 페이징
- * 1. content
- *  - page 현재페이지
- *  - limit 한 페이지당 표시할 개체수
- *
- * 2. pagebar
- *  - page 현재페이지
- *  - limit 한 페이지당 표시할 개체수
- *  - totalCount 전체 개체수
- *  - totalPage 전체 페이지수
- *  - pagebarSize 페이지바의 숫자개수
- *  - pageNo 페이지 증감변수
- *  - pagebarStart | pagebarEnd 페이지 증감변수의 범위
- *  - url 요청 url
- * </pre>
- */
-@WebServlet("/admin/memberList")
-public class AdminMemberListServlet extends HttpServlet {
+//@WebServlet("/admin/searchMember")
+public class _AdminSearchMemberServlet extends HttpServlet {
     private MemberService memberService = new MemberService();
+
+    /**
+     * mybatis에서는 식별자(컬럼명, 테이블명)를 동적으로 작성할 수 있다. ${식별자}
+     *  - (PreparedStatement에는 없음)
+     *
+     * select * from member where id like ?
+     * select * from member where name like ?
+     * select * from member where email like ?
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -61,15 +51,13 @@ public class AdminMemberListServlet extends HttpServlet {
         System.out.println(param);
 
         // 2. 업무로직
-        List<Member> members = memberService.findAll(param);
+        // content영역
+        List<Member> members = memberService.searchMember(param);
         req.setAttribute("members", members);
 
-        // 페이지바 작업
-        int totalCount = memberService.getTotalCount(param);
-        String url = req.getRequestURI();
-        if(searchType != null && searchKeyword != null) {
-            url += "?search-type=" + searchType + "&search-keyword=" + searchKeyword;
-        }
+        // pagebar영역
+        int totalCount = memberService.getTotalCount(param); // 검색 조건에 맞는 총 회원수
+        String url = req.getRequestURI() + "?search-type=" + searchType + "&search-keyword=" + searchKeyword;
         String pagebar = HelloMvcUtils.getPagebar(page, limit, totalCount, url);
         req.setAttribute("pagebar", pagebar);
 

@@ -79,7 +79,7 @@ public class BoardServiceTest {
     @Test
     public void test5() {
         long id = 61;
-        Board board = boardService.findById(id);
+        BoardVo board = boardService.findById(id);
 
         String newTitle = board.getTitle() + "(수정)";
         String newContent = "반갑습니다";

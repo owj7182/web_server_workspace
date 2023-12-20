@@ -20,10 +20,33 @@ public class BoardService {
         return boards;
     }
 
+    /**
+     * 조회수 상관없이 게시글 조회해야 하는 경우
+     * @param id
+     * @return
+     */
     public BoardVo findById(long id) {
+        return findById(id, true);
+    }
+
+    public BoardVo findById(long id, boolean hasRead) {
         SqlSession session = getSqlSession();
-        BoardVo board = boardDao.findById(session, id);
-        session.close();
+        BoardVo board = null;
+        int result = 0;
+        try {
+            // 조회수 증가 처리
+            if(!hasRead)
+                result = boardDao.updateBoardReadCount(session, id);
+
+            // 조회
+            board = boardDao.findById(session, id);
+            session.commit();
+        } catch (Exception e) {
+            session.rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
         return board;
     }
 
@@ -54,11 +77,22 @@ public class BoardService {
         return result;
     }
 
-    public int updateBoard(Board board) {
+    public int updateBoard(BoardVo board) {
         int result = 0;
         SqlSession session = getSqlSession();
         try{
+            // board 테이블 수정
             result = boardDao.updateBoard(session, board);
+
+            // attachment 테이블 등록
+            List<Attachment> attachments = board.getAttachments();
+            if(!attachments.isEmpty()) {
+                for (Attachment attach : attachments) {
+                    attach.setBoardId(board.getId());
+                    result = boardDao.insertAttachment(session, attach);
+                }
+            }
+
             session.commit();
         } catch (Exception e) {
             session.rollback();
@@ -98,4 +132,6 @@ public class BoardService {
         session.close();
         return totalCount;
     }
+
+
 }

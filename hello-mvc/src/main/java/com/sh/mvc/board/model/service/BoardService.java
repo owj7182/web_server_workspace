@@ -157,4 +157,18 @@ public class BoardService {
     }
 
 
+    public int insertBoardComment(BoardComment comment) {
+        int result = 0;
+        SqlSession session = getSqlSession();
+        try {
+            result = boardDao.insertBoardComment(session, comment);
+            session.commit();
+        } catch (Exception e) {
+            session.rollback();
+            throw e;
+        }finally {
+            session.close();
+        }
+        return result;
+    }
 }

@@ -10,16 +10,16 @@ import java.io.IOException;
 /**
  * <pre>
  * Filter의 생명주기
- *  - 서버구동시 Filter객체를 만들고, 그 이후 해당객체를 재사용(싱글턴)한다.
+ * - 서버구동시  Filter객체를 만들고, 그 이후 해당객체를 재사용(싱글턴)한다.
  * 1. 생성자 호출
  * 2. init 호출
- *
+ * 
  * 3. doFilter (전처리/후처리)
  *  - Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
  *  - HttpFilter#doFilter(HttpServletRequest, HttpServletResponse, FilterChain)
  *
  * 4. destroy 호출
- * </pre>
+ * 
  */
 //@WebFilter("/*")
 public class LifeCycleFilter extends HttpFilter {
@@ -48,7 +48,7 @@ public class LifeCycleFilter extends HttpFilter {
 
     @Override
     public void destroy() {
-        System.out.println("LifeCycleFilter#destroy 호출!");
+        System.out.println("LifeCycleFiter#destroy 호출!");
         super.destroy();
     }
 }

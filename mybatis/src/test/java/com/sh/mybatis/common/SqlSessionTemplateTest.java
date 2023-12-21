@@ -11,8 +11,9 @@ public class SqlSessionTemplateTest {
 
     @DisplayName("정상적인 SqlSession객체를 반환한다.")
     @Test
-    public void test() {
+    public void test(){
         SqlSession sqlSession = getSqlSession();
         assertThat(sqlSession).isNotNull();
     }
+
 }

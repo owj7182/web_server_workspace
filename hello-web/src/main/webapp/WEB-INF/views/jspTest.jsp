@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8" %>
+         pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -26,20 +26,19 @@ pageEncoding="UTF-8" %>
 
 <h3>names</h3>
 <ul>
-    <li>${names[0]}</li>
-    <li>${names[1]}</li>
-    <li>${names[2]}</li>
-    <li>${names[3]}</li>
+    <c:forEach items="${names}" var="name">
+        <li>${name}</li>
+    </c:forEach>
 </ul>
 
 <h3>items</h3>
 <table>
     <thead>
-        <tr>
-            <th>No</th>
-            <th>이름</th>
-            <th>가격</th>
-        </tr>
+    <tr>
+        <th>No</th>
+        <th>이름</th>
+        <th>가격</th>
+    </tr>
     </thead>
     <tbody>
     <c:forEach items="${items}" var="item">
@@ -58,7 +57,7 @@ pageEncoding="UTF-8" %>
     <tr>
         <th>이름</th>
         <td>
-            <input type="text" value="${map.name}" />
+            <input type="text" value="${map.name}"/>
         </td>
     </tr>
     <tr>
@@ -79,19 +78,25 @@ pageEncoding="UTF-8" %>
 
 <h2>숫자</h2>
 <ul>
-    <li><fmt:formatNumber value="${no1}" pattern="#.##" /></li><%-- 123.46 --%>
-    <li><fmt:formatNumber value="${no1}"/></li><%-- 123.456 --%>
-    <li><fmt:formatNumber value="${no1}" pattern="#.00000" /></li><%-- 123.45600 --%>
-    <li><fmt:formatNumber value="${no2}" pattern="#,###"/></li><%-- 3,000,000 --%>
-    <li><fmt:formatNumber value="${no2}" type="currency"/></li><%-- ₩3,000,000 --%>
-    <li><fmt:formatNumber value="${no3}" type="percent"/></li><%-- 15% --%>
+    <li><fmt:formatNumber value="${no1}" pattern="#.##"/></li>
+    <%-- 123.46 --%>
+    <li><fmt:formatNumber value="${no1}" pattern="#.#####"/></li>
+    <%-- 123.456 --%>
+    <li><fmt:formatNumber value="${no1}" pattern="#.00000"/></li>
+    <%-- 123.45600 --%>
+    <li><fmt:formatNumber value="${no2}" pattern="#,###"/></li>
+    <%-- 3,000,000 --%>
+    <li><fmt:formatNumber value="${no2}" type="currency"/></li>
+    <%-- ₩3,000,000 --%>
+    <li><fmt:formatNumber value="${no3}" type="percent"/></li>
+    <%-- 15% --%>
 </ul>
 
 <h2>날짜/시각</h2>
 <ul>
-    <li><fmt:formatDate value="${date}" pattern="yyyy년MM월dd일"/></li><%-- 2023년07월24일 --%>
-    <li><fmt:formatDate value="${datetime}" pattern="yyyy/MM/dd HH:mm:ss.sss"/></li><%-- 2023/12/07 18:00:52.335 --%>
+    <%-- SimpleDateFormat 형식문자 참조 --%>
+    <li><fmt:formatDate value="${date}" pattern="yyyy년MM월dd일"/></li>
+    <li><fmt:formatDate value="${datetime}" pattern="yyyy/MM/dd HH:mm:ss.SSS"/></li>
 </ul>
-<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 </body>
 </html>

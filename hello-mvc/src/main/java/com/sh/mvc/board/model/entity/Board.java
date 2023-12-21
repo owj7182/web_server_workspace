@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 /**
  * entity 클래스
- *  - db 테이블과 매칭되는 클래스
+ * - db 테이블과 매칭되는 클래스
  */
 public class Board {
     private long id;
@@ -86,13 +86,5 @@ public class Board {
                 '}';
     }
 
-    public void setValue(String name, String value) {
-        switch (name) {
-            case "id" : this.id = Long.parseLong(value); break;
-            case "title" : this.title = value; break;
-            case "memberId" : this.memberId = value; break;
-            case "content" : this.content = value; break;
-            default: throw new RuntimeException("부적절한 name값 : " + name);
-        }
-    }
+
 }

@@ -19,18 +19,18 @@ public class _AdminSearchMemberServlet extends HttpServlet {
     private MemberService memberService = new MemberService();
 
     /**
-     * mybatis에서는 식별자(컬럼명, 테이블명)를 동적으로 작성할 수 있다. ${식별자}
-     *  - (PreparedStatement에는 없음)
+     * mybatis에서는 식별자(컬럼명, 테이블명)를 동적으로 작성할수 있다. ${식별자}
+     * - (PreparedStatement에는 없음)
      *
      * select * from member where id like ?
      * select * from member where name like ?
      * select * from member where email like ?
+     *
      * @param req
      * @param resp
      * @throws ServletException
      * @throws IOException
      */
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // 1. 사용자입력값 가져오기
@@ -53,15 +53,16 @@ public class _AdminSearchMemberServlet extends HttpServlet {
         // 2. 업무로직
         // content영역
         List<Member> members = memberService.searchMember(param);
+        System.out.println(members);
         req.setAttribute("members", members);
 
         // pagebar영역
-        int totalCount = memberService.getTotalCount(param); // 검색 조건에 맞는 총 회원수
+        int totalCount = memberService.getTotalCount(param); // 검색조건에 맞는 총 회원수
         String url = req.getRequestURI() + "?search-type=" + searchType + "&search-keyword=" + searchKeyword;
         String pagebar = HelloMvcUtils.getPagebar(page, limit, totalCount, url);
         req.setAttribute("pagebar", pagebar);
 
-        // 3. view단 처리
+        // 3. view단처리
         req.getRequestDispatcher("/WEB-INF/views/admin/memberList.jsp").forward(req, resp);
     }
 }

@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.sh.mvc.member.model.entity.Role"%>
+<%@ page import="com.sh.mvc.member.model.entity.Role" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -16,7 +16,7 @@
     <script src="${pageContext.request.contextPath}/js/tailwind.config.js"></script>
     <script>
         <c:if test="${msg != null}">
-            alert(`${msg}`); // 여러줄 입력이 가능하도록 `(백틱)으로 감싸야 한다.
+            alert(`${msg}`); // 여러줄 입력이 가능하도록 `(백틱)으로 감싸야한다.
             <%-- session속성 msg 제거해서 1회만 출력되도록 한다. --%>
             <%-- session.removeAttribute("msg"); --%>
             <c:remove var="msg" scope="session" />
@@ -38,10 +38,9 @@
                         <a href="${pageContext.request.contextPath}/member/memberRegister" class="text-md text-gray-500 hover:underline">회원가입</a>
                     </c:if>
                     <c:if test="${loginMember != null}">
-                        <a href="${pageContext.request.contextPath}/member/memberDetail" class="text-md text-gray-600 hover:underline">${loginMember.id}</a>님, 안녕하세요😁
+                        <a href="${pageContext.request.contextPath}/member/memberDetail" class="text-md text-gray-600 hover:underline">${loginMember.id}</a>님, 안녕하세요🥑
                         <a href="${pageContext.request.contextPath}/member/memberLogout" class="text-md text-gray-500 hover:underline">로그아웃</a>
                     </c:if>
-
 
                 </div>
             </div>
@@ -51,7 +50,7 @@
                 <div class="flex items-center">
                     <ul class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm">
                         <li>
-                            <a href="${pageContext.request.contextPath}" class="text-gray-900 hover:underline" aria-current="page">Home</a>
+                           <a href="${pageContext.request.contextPath}" class="text-gray-900 hover:underline" aria-current="page">Home</a>
                         </li>
                         <li>
                             <a href="#" class="text-gray-900 hover:underline">About</a>
@@ -60,11 +59,11 @@
                             <a href="${pageContext.request.contextPath}/board/boardList" class="text-gray-900 hover:underline">Board</a>
                         </li>
                         <%-- 관리자로 로그인한 경우만 노출하기 --%>
-                        <li>
-                            <c:if test="${loginMember.role == Role.A}">
+                        <c:if test="${loginMember.role == Role.A}">
+                            <li>
                                 <a href="${pageContext.request.contextPath}/admin/memberList" class="text-gray-900 hover:underline">Admin-Member</a>
-                            </c:if>
-                        </li>
+                            </li>
+                        </c:if>
                     </ul>
                 </div>
             </div>

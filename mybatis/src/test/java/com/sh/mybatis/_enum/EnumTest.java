@@ -3,7 +3,7 @@ package com.sh.mybatis._enum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EnumTest {
     public enum Type {
@@ -26,9 +26,10 @@ public class EnumTest {
 
     @Test
     public void test1() {
-
         Member member = new Member("honggd", Type.M, Gender.M);
 //        Member member = new Member("honggd", Gender.M, Gender.M); // Compile Error
+//        Member member = new Member("honggd", "K", Gender.M); // Compile Error
+//        Member member = new Member("honggd", Type.K, Gender.M); // Compile Error
         assertThat(member.type).isEqualTo(Type.M);
         assertThat(member.gender).isEqualTo(Gender.M);
 
@@ -37,33 +38,29 @@ public class EnumTest {
         assertThat(admin.gender).isEqualTo(Gender.F);
     }
 
-    @DisplayName("Enum객체는 하나만 만들어져 공유된다.")
+    @DisplayName("Enum객체는 하나만 만들어져 공유된다. Immutable")
     @Test
-    public void test2(){
+    public void test2() {
         Type M1 = Type.M;
         Type M2 = Type.M;
         assertThat(M1).isEqualTo(M2);
         assertThat(M1 == M2).isTrue();
-
     }
-
-    @DisplayName("Enum을 String으로 변환")
+    
+    @DisplayName("Enum은 String으로 변환")
     @Test
-    public void test3(){
+    public void test3() {
         Gender F = Gender.F;
         String f = F.name(); // "F"
         assertThat(f)
                 .isEqualTo("F")
                 .isEqualTo(Gender.F.name());
     }
-
+    
     @DisplayName("String을 Enum으로 변환")
     @Test
-    public void test4(){
+    public void test4() {
         Gender M = Gender.valueOf("M");
         assertThat(M).isEqualTo(Gender.M);
     }
-
-
-
 }

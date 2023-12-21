@@ -1,5 +1,6 @@
 package com.sh.mvc.member.controller;
 
+import com.sh.mvc.member.model.dao.MemberDao;
 import com.sh.mvc.member.model.entity.Member;
 import com.sh.mvc.member.model.service.MemberService;
 
@@ -15,29 +16,25 @@ import java.io.IOException;
 public class MemberDeleteServlet extends HttpServlet {
 
     private MemberService memberService = new MemberService();
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        // 1. 인코딩 처리
-//        req.setCharacterEncoding("utf-8");
-
-        // 2. 로그인했을때의 id값을 세션에서 가져옴
+        // 1. 인코딩처리
+        // 2. 사용자입력값처리
         HttpSession session = req.getSession();
-        Member loginMember = (Member) req.getSession().getAttribute("loginMember");
+        Member loginMember = (Member) session.getAttribute("loginMember");
         String id = loginMember.getId();
-
+        System.out.println(id);
         // 3. 업무로직
         int result = memberService.deleteMember(id);
-
-        // 4. 세션해제
+        // 세션해제
         session.invalidate();
 
         // 세션 새로 생성. msg 속성 저장
         session = req.getSession();
-        session.setAttribute("msg", "성공적으로 탈퇴했습니다. \n다음에 더 좋은 서비스로 만나요 🤗");
+        session.setAttribute("msg", "성공적으로 탈퇴했습니다. \n다음에 더 좋은 서비스로 만나요 🖐");
 
-        // 5. view(forward) | redirect
+        // 4. redirect
         resp.sendRedirect(req.getContextPath() + "/");
-
     }
 }

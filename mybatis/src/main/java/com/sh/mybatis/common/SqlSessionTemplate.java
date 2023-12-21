@@ -19,17 +19,15 @@ public class SqlSessionTemplate {
     static {
         String resource = "mybatis-config.xml"; // src/main/resources/mybatis-config.xml
 
-        try(InputStream is = Resources.getResourceAsStream(resource)){
+        try(InputStream is = Resources.getResourceAsStream(resource)) {
             SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
             factory = builder.build(is);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
-
     public static SqlSession getSqlSession() {
         return factory.openSession(false); // auto-commit
     }
+
 }

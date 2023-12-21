@@ -2,7 +2,7 @@ package com.sh.mybatis._enum;
 
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class BeforeEnumTest {
     public static final String TYPE_MEMBER = "M";
@@ -23,7 +23,9 @@ public class BeforeEnumTest {
 
     @Test
     public void test1() {
-        Member member = new Member("honggd", TYPE_MEMBER, GENDER_MALE);
+//        Member member = new Member("honggd", TYPE_MEMBER, GENDER_MALE);
+//        Member member = new Member("honggd", GENDER_MALE, GENDER_MALE);
+        Member member = new Member("honggd", "K", GENDER_MALE);
         assertThat(member.type).isEqualTo(TYPE_MEMBER);
         assertThat(member.gender).isEqualTo(GENDER_MALE);
 
@@ -31,7 +33,5 @@ public class BeforeEnumTest {
         assertThat(admin.type).isEqualTo(TYPE_ADMIN);
         assertThat(admin.gender).isEqualTo(GENDER_FEMALE);
     }
-
-
 
 }

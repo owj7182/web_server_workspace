@@ -12,7 +12,6 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 public class MemberServicePagingTest {
     private MemberService memberService;
 
@@ -30,7 +29,7 @@ public class MemberServicePagingTest {
     @DisplayName("회원목록 페이징은 10건씩 조회되어야 한다.")
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13})
-    public void test2(int page){
+    public void test2(int page) {
         assertThat(page).isGreaterThan(0);
         System.out.println(page);
 
@@ -44,7 +43,7 @@ public class MemberServicePagingTest {
 
     @DisplayName("전체 회원수가 정상 조회된다.")
     @Test
-    public void test3() {
+    public void test3(){
         int totalCount = memberService.getTotalCount();
         System.out.println(totalCount);
         assertThat(totalCount).isGreaterThanOrEqualTo(0);

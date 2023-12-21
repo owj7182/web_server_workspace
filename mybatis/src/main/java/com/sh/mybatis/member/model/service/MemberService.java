@@ -45,7 +45,7 @@ public class MemberService {
         try {
             result = memberDao.insertMember(session, member);
             session.commit();
-        } catch (Exception e) {
+        } catch (Exception e){
             session.rollback();
             throw e;
         } finally {
@@ -60,10 +60,10 @@ public class MemberService {
         try {
             result = memberDao.updateMember(session, member);
             session.commit();
-        }catch (Exception e) {
+        } catch(Exception e) {
             session.rollback();
             throw e;
-        }finally {
+        } finally {
             session.close();
         }
         return result;
@@ -72,13 +72,13 @@ public class MemberService {
     public int updateMemberPassword(Member member) {
         int result = 0;
         SqlSession session = getSqlSession();
-        try{
+        try {
             result = memberDao.updateMemberPassword(session, member);
             session.commit();
         } catch (Exception e) {
             session.rollback();
             throw e;
-        }finally {
+        } finally {
             session.close();
         }
         return result;
@@ -87,7 +87,7 @@ public class MemberService {
     public int updateMemberRole(Member member) {
         int result = 0;
         SqlSession session = getSqlSession();
-        try{
+        try {
             result = memberDao.updateMemberRole(session, member);
             session.commit();
         } catch (Exception e) {
@@ -102,7 +102,7 @@ public class MemberService {
     public int deleteMember(String id) {
         int result = 0;
         SqlSession session = getSqlSession();
-        try{
+        try {
             result = memberDao.deleteMember(session, id);
             session.commit();
         } catch (Exception e) {

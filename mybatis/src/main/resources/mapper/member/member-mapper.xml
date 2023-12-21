@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="member">
     <!--
         #{id} 전달된 id값으로 치환
         id 태그식별자
-        resultType ResultSet 한행이 변환될 타입(fullname | alias)
-     -->
+        resultType ResultSet한행이 변환될 타입(fullname | alias)
+    -->
     <select id="findById" resultType="member">
         select
             *
         from
             member
         where
-            id = #{id}
+            id = #{iddddddddd}
     </select>
-
     <!--
         resultType속성은 한행과 매칭되는 타입 작성
     -->
@@ -28,7 +27,6 @@
         order by
             reg_date desc
     </select>
-
     <select id="findByName" resultType="member">
         select
             *
@@ -37,7 +35,6 @@
         where
             name like '%' || #{name} || '%'
     </select>
-
     <select id="findByGender" resultType="member">
         select
             *
@@ -50,11 +47,12 @@
         insert into
             member
         values (
-            #{id}, #{password}, #{name}, #{role}, #{gender}, #{birthday}, #{email}, #{phone}, #{hobby, typeHandler=listStringTypeHandler}, default, default
+            #{id}, #{password}, #{name}, #{role}, #{gender}, #{birthday}, #{email}, #{phone},
+            #{hobby, typeHandler=listStringTypeHandler}, default, default
         )
     </insert>
     <update id="updateMember">
-        update
+       update
             member
         set
             name = #{name},
@@ -65,7 +63,6 @@
         where
             id = #{id}
     </update>
-
     <update id="updateMemberPassword">
         update
             member
@@ -74,8 +71,7 @@
         where
             id = #{id}
     </update>
-
-    <update id="member.updateMemberRole">
+    <update id="updateMemberRole">
         update
             member
         set
@@ -83,7 +79,6 @@
         where
             id = #{id}
     </update>
-
     <delete id="deleteMember">
         delete from
             member

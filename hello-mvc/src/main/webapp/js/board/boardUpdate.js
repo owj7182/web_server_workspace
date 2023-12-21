@@ -5,14 +5,15 @@ document.boardUpdateFrm.addEventListener('submit', (e) => {
 
     // 제목 유효성 검사
     if(!/^.+$/.test(title.value.trim())) {
-        alert('제목을 작성해주세요.😏');
+        alert('제목을 작성해주세요. 😁');
         e.preventDefault();
         return;
     }
+
     // 내용 유효성 검사
-    // 정규 표현식의 .에는 \n이 포함되지 않는다.
+    // 정규표현식의 .에는 \n이 포함되지 않는다.
     if(!/^(.|\n)+$/.test(content.value.trim())) {
-        alert('내용을 작성해주세요!!');
+        alert('내용을 작성해주세요. 😁');
         e.preventDefault();
         return;
     }

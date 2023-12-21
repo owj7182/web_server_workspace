@@ -1,5 +1,5 @@
 -- web계정 생성 (관리자)
-alter session set "_oracle_script" =true;
+alter session set "_oracle_script" = true;
 
 create user web
 identified by web
@@ -10,15 +10,15 @@ grant connect, resource to web;
 alter user web quota unlimited on users;
 
 -- web계정 시작
-create table member(
+create table member (
     id varchar2(15),
     password varchar2(300) not null,
     name varchar2(100) not null,
     role char(1) default 'U' not null,
     gender char(1),
-    birthday date,
+    birthday date, 
     email varchar2(100),
-    phone char(11) not null,
+    phone char(11),
     hobby varchar2(500),
     point number default 1000,
     reg_date date default sysdate,
@@ -41,21 +41,19 @@ values('qwerty','1234','쿼띠이','U','F', to_date('19900109','yyyymmdd'), 'qwe
 insert into member 
 values('admin','1234','관리자','A','M', to_date('19971020','yyyymmdd'), 'admin@naver.com', '01044441234', '게임,독서',default, default);
 
---delete from member where id in ('leess', 'sejong');
-
---update
---    member
---set
---    password = '9FipNtrDaOHuV+j/mI/im1JzeI4r04M496uRbGxYJagaVotqCfHIfBzDd5OZdFoOJPI52pbZaE+iWvLFFZHBhg=='
---where
---    id = 'qwerty';
 
 select * from member;
 commit;
 
+--delete from member where id in ('leess', 'sejong');
+--update 
+--    member 
+--set 
+--    password = 'E0jrzcf+lMpxXNOFySXdpV0ZduTNjT3wTwLA0/5hoLRmr+W8EL6D7v+YN3kWGmrEEimasiH+ZAHABakRbPzXLQ==' 
+--where 
+--    id = 'admin';
 
---회원추가
-
+-- 회원추가
 Insert into WEB.MEMBER (ID,PASSWORD,NAME,ROLE,GENDER,BIRTHDAY,EMAIL,PHONE,HOBBY,POINT,REG_DATE) values ('encrypten_man','b5fMEM1PXQznhG6q+YA+t03cAhGSXAXwvU53Nn1BGiX3ta1Io+OBrDdcMSO0FNsGHq2F2yFZuDM0o4VMRct05Q==','암호화','U','M',to_date('91/02/03','RR/MM/DD'),null,'01012341243',null,1000,to_date('18/03/24','RR/MM/DD'));
 Insert into WEB.MEMBER (ID,PASSWORD,NAME,ROLE,GENDER,BIRTHDAY,EMAIL,PHONE,HOBBY,POINT,REG_DATE) values ('abcd','kl9Dw8+5VrvjxqqAI7p61c+iHRBBhv/8aedo5VlA2WU7HNNvumFPui4YRPRDbaIPg3UMbsHbNW2hVGkb3XGpsQ==','김준호','U','M',to_date('92/02/02','RR/MM/DD'),'abcd@naver.com','01012345678','운동,등산,독서',1000,to_date('18/02/01','RR/MM/DD'));
 Insert into WEB.MEMBER (ID,PASSWORD,NAME,ROLE,GENDER,BIRTHDAY,EMAIL,PHONE,HOBBY,POINT,REG_DATE) values ('hihiroo','tVVKLkAaPExiMPG+61kg/Sa3zwUjBDn+d/t9+5Mzayxk/nX1ejPD51En+Dp3d2tsOFdfwhYtDLHwXur7x2WRow==','김안녕','U','F',to_date('01/10/18','RR/MM/DD'),'hihiroo@naver.com','01023454635','운동,여행',1000,to_date('18/02/05','RR/MM/DD'));
@@ -168,39 +166,37 @@ Insert into WEB.MEMBER (ID,PASSWORD,NAME,ROLE,GENDER,BIRTHDAY,EMAIL,PHONE,HOBBY,
 commit;
 
 -- 기본 페이징 처리
---  top-n (rownum | row_number() over())
-
+-- top-n (rownum | row_number() over())
 select
     *
 from (
-    select
-            rownum rnum,
-            m.*
-    from(
+    select 
+        rownum rnum,
+        m.*
+    from (
         select
             *
         from
             member
         order by
-            reg_date desc) m
-            )
+            reg_date desc) m 
+    )               
 where
     rnum between 11 and 20;
-   
-   
+    
 select
     *
-from(
+from (
     select
         row_number() over(order by reg_date desc) rnum,
         m.*
     from
         member m
-        )
+    )
 where
     rnum between 111 and 120;
 
--- mybatis는 RowBounds를 사용하면, 페이징처리를 대신 해준다.
+-- mybatis는 RowBounds를 사용하면, 페이징처리를 대신해준다.
 select
     *
 from
@@ -208,35 +204,38 @@ from
 order by
     reg_date desc;
     
--- 전체 회원수
-    select count(*) from member;
+-- 전체 회원수    
+select count(*) from member;
 
 
--- 게시판 테이블
+-- 게시판 테이블 
 create table board (
-    id number
-    , title varchar2(500)
-    , member_id varchar2(15)
-    , content varchar2(4000)
-    , read_count number default 0
-    , reg_date date default sysdate
-    , constraints pk_board_id primary key(id)
-    , constraints fk_board_member_id foreign key(member_id) references member(id) on delete set null
+    id number,
+    title varchar2(500),
+    member_id varchar2(15),
+    content varchar2(4000),
+    read_count number default 0,
+    reg_date date default sysdate,
+    constraints pk_board_id primary key(id),
+    constraints fk_board_member_id foreign key(member_id) references member(id) on delete set null
 );
 create sequence seq_board_id;
 
+
 -- 첨부파일을 서버컴퓨터에 저장, 저장된 파일에 대한 정보만 db테이블에 저장한다.
 create table attachment (
-    id number
-    , board_id number not null
-    , original_filename varchar2(255) not null -- 사용자가 업로드한 파일명
-    , renamed_filename varchar2(255) not null -- 저장된 파일명(uuid)
-    , reg_date date default sysdate
-    , constraints pk_attachment_id primary key(id)
-    , constraints fk_attachment_board_id foreign key(board_id) references board(id) on delete cascade
+    id number, 
+    board_id number not null,
+    original_filename varchar2(255) not null, -- 사용자가 업로드한 파일명
+    renamed_filename varchar2(255) not null, -- 저장된 파일명(uuid)
+    reg_date date default sysdate,
+    constraints pk_attachment_id primary key(id),
+    constraints fk_attachment_board_id foreign key(board_id) references board(id) on delete cascade
 );
 create sequence seq_attachment_id;
 
+
+-- 샘플데이터
 insert into web.board (id,title,member_id,content,reg_date,read_count) values (seq_board_id.nextval,'안녕하세요, 게시판입니다 - 1','abcde','반갑습니다',to_date('18/02/10','RR/MM/DD'),0);
 insert into web.board (id,title,member_id,content,reg_date,read_count) values (seq_board_id.nextval,'안녕하세요, 게시판입니다 - 2','qwerty','안녕하세요',to_date('18/02/12','RR/MM/DD'),0);
 insert into web.board (id,title,member_id,content,reg_date,read_count) values (seq_board_id.nextval,'안녕하세요, 게시판입니다 - 3','admin','반갑습니다',to_date('18/02/13','RR/MM/DD'),0);
@@ -309,94 +308,116 @@ insert into web.attachment(id, board_id, original_filename, renamed_filename)
 values(seq_attachment_id.nextval, 60, '테스트2.txt', '00016e0f-4538-47b0-b676-c746c50cd64e.txt');
 commit;
 
+
 select * from board order by id desc;
 select * from attachment order by id desc;
 
+-- 첨부파일이 있는 게시글 조회
+select
+    b.*, 
+    (select count(*) from attachment where board_id = b.id) attach_count
+from
+    board b;
+
+
 -- 게시글 상세보기
 -- 1. board 조회 + attachment 조회
-select * from board where id = 76;
-select * from attachment where board_id = 76;
+select * from board where id = 67;
+select * from attachment where board_id = 67;
 
 -- 2. 조인쿼리
 select
-    b.*
-    , m.name member_name
-    , a.id attach_id
-    , a.board_id
-    , a.original_filename
-    , a.renamed_filename
-    , a.reg_date attach_reg_date
+    b.*,
+    m.name member_name, 
+    a.id attach_id,
+    a.board_id,
+    a.original_filename,
+    a.renamed_filename,
+    a.reg_date attach_reg_date
 from
-    board b
-        left join member m
-            on b.member_id = m.id
-        left join attachment a
-            on b.id = a.board_id
+    board b 
+      left join member m
+        on b.member_id = m.id
+      left join attachment a
+        on b.id = a.board_id
+      
 where
-    b.id = 76;
+    b.id = 67;
 
-
-
-
-
--- TB_USER 테이블 생성 및 SEQ_UNO 시퀀스 생성
-
-CREATE TABLE TB_USER(
-USER_NO NUMBER PRIMARY KEY,
-USER_ID VARCHAR2(50) UNIQUE NOT NULL,
-USER_NAME VARCHAR2(50) NOT NULL,
-USER_AGE NUMBER NOT NULL
+-- 댓글 기능구현
+create table board_comment (
+    id number,
+    board_id number,
+    member_id varchar2(20),
+    content varchar2(2000),
+    comment_level number default 1, -- 댓글인경우 1, 대댓글인 경우 2
+    parent_comment_id number, -- 댓글인 경우 null, 대댓글인 경우 부모댓글id
+    reg_date date default sysdate,
+    constraints pk_board_comment_id primary key(id),
+    constraints fk_board_comment_board_id foreign key(board_id) references board(id) on delete cascade,
+    constraints fk_board_comment_member_id foreign key(member_id) references member(id) on delete set null,
+    constraints fk_board_parent_comment_id foreign key(parent_comment_id) references board_comment(id) on delete cascade
 );
+create sequence seq_board_comment_id;
 
-CREATE SEQUENCE SEQ_UNO
-START WITH 1
-INCREMENT BY 1
-NOCACHE;
+-- 67번 게시판 댓글 데이터 
+insert into board_comment
+values(seq_board_comment_id.nextval, 67, 'abcde', '좋은 글 잘 봤습니다.', default, null, default);
+insert into board_comment
+values(seq_board_comment_id.nextval, 67, 'opqr', '활력을 얻고 갑니다.', default, null, default);
+insert into board_comment
+values(seq_board_comment_id.nextval, 67, 'admin', '이달의 글로 선정되셨습니다. 축하합니다~', default, null, default);
 
+-- 대댓글
+insert into board_comment
+values(seq_board_comment_id.nextval, 67, 'qwerty', '읽어주셔서 감사합니다~ 구독과 좋아요 부탁드려요~', 2, 1, default);
+insert into board_comment
+values(seq_board_comment_id.nextval, 67, 'qwerty', '활력을 어디서 얻으셨어요?', 2, 2, default);
+insert into board_comment
+values(seq_board_comment_id.nextval, 67, 'qwerty', '감사합니다~', 2, 3, default);
+insert into board_comment
+values(seq_board_comment_id.nextval, 67, 'opqr', '첨부파일이 훌륭합니다.', 2, 2, default);
 
+select * from board_comment;
 
--- 샘플 데이터 삽입
+-- 계층형쿼리 
+-- 행과 행을 부모/자식관계로 연결해서 tree구조의 순서로 결과집합을 반환.
+-- 계층구조의 데이터 표현에 적합. 댓글, 조직도, 메뉴등
 
-INSERT INTO TB_USER VALUES(SEQ_UNO.NEXTVAL, 'gd_hong', '홍길동', 20);
-INSERT INTO TB_USER VALUES(SEQ_UNO.NEXTVAL, 'sh_han', '한소희', 28);
-INSERT INTO TB_USER VALUES(SEQ_UNO.NEXTVAL, 'jm_park', '지민', 27);
-COMMIT;
+-- start with 루트 부모행을 지정하는 조건절
+-- connect by 부모/자식을 연결하는 조건절. prior를 부모행의 컬럼 앞에 작성
+-- level 가상컬럼(계층레벨)을 제공
 
-select * from TB_USER;
-
-
-create table student (
-    student_number number
-    , student_name varchar2(60) not null
-    , korean_score number not null
-    , english_score number not null
-    , math_score number not null
-    , constraints pk_student_id primary key(student_number)
-);
-
-create table manager(
-    manager_number number
-    , manager_name varchar2(60) not null
-    , manager_hire_date varchar2(60) default sysdate
-    , constraints pk_manager_id primary key(manager_number)
-);
-
-
-CREATE TABLE USERS(
-USER_NO NUMBER PRIMARY KEY,
-USER_ID VARCHAR2(20) NOT NULL,
-USER_PW VARCHAR2(20) NOT NULL,
-USER_NAME VARCHAR2(20) NOT NULL,
-USER_ADDR VARCHAR(50) NOT NULL,
-REG_DATE DATE DEFAULT SYSDATE
-);
-
-CREATE SEQUENCE SEQ_USERS;
-
-
--- 첨부파일이 있는 게시글 조회
 select
-    b.*
-    , (select count(*) from attachment where board_id = b.id)  attach_count
+    *
 from
-    board b;
+    board_comment
+where
+    board_id = 67
+start with
+    comment_level = 1
+connect by
+    prior id = parent_comment_id
+order siblings by
+    id;
+    
+select
+    lpad(' ', (level - 1) * 5) || content,
+    member_id,
+    level
+from
+    board_comment
+where
+    board_id = 67
+start with
+    comment_level = 1
+connect by 
+    parent_comment_id = prior id;
+
+
+
+
+
+
+
+

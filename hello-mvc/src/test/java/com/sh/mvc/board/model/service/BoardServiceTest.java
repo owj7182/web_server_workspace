@@ -2,138 +2,162 @@ package com.sh.mvc.board.model.service;
 
 import com.sh.mvc.board.model.entity.Board;
 import com.sh.mvc.board.model.vo.BoardVo;
-import org.junit.jupiter.api.*;
+import org.apache.ibatis.session.SqlSession;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
+import static com.sh.mvc.common.SqlSessionTemplate.getSqlSession;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class BoardServiceTest {
+    static final int limit = 10; // 페이지당 게시글수
     BoardService boardService;
-
     @BeforeEach
-    public void beforeEach() {
+    void setUp() {
+        // Fixture생성코드
         this.boardService = new BoardService();
     }
-
-    @DisplayName("BoardService객체는 null이 아니다.")
-    @Test
-    public void test1() {
-        assertThat(boardService).isNotNull();
-    }
-
-    @Disabled
     @DisplayName("게시글 전체 조회")
     @Test
-    public void test2() {
+    void test1(){
+        // given
+        // when
         List<Board> boards = boardService.findAll();
-        assertThat(boards).isNotNull().isNotEmpty();
-
-        boards.forEach((board) -> {
-            System.out.println(board);
-            assertThat(board.getId()).isNotEqualTo(0);
-            assertThat(board.getMemberId()).isNotNull();
-        });
+        // then
+        // allSatisfy : 리스트의 각 요소가 모든 단정문을 충족하는지 확인
+        assertThat(boards)
+                .isNotNull()
+                .allSatisfy((board -> {
+                    // pk, 필수값 확인
+                    assertThat(board.getId()).isNotZero();
+                    assertThat(board.getTitle()).isNotNull();
+                    assertThat(board.getContent()).isNotNull();
+                    assertThat(board.getRegDate()).isNotNull();
+                }));
     }
+    @DisplayName("존재하는 게시글 한건 조회")
+    @ParameterizedTest
+    @ValueSource(longs = {1L, 2L, 3L})
+    void test2_1(long id) {
+        // given
+        // when
+        Board board = boardService.findById(id);
 
-    @DisplayName("게시글 한건 조회")
-    @Test
-    public void test3() {
-        Board board = boardService.findById(1);
-        System.out.println(board);
-
-        assertThat(board).isNotNull();
-
-        assertThat(board.getId()).isNotNull();
-        assertThat(board.getMemberId()).isNotNull();
+        // then
+        // satisfies : 요소가 모든 단정문을 충족하는지 확인
+        assertThat(board)
+                .isNotNull()
+                .satisfies((_board) -> {
+                   // pk, 필수값 확인
+                    assertThat(_board.getId()).isNotZero();
+                    assertThat(_board.getTitle()).isNotNull();
+                    assertThat(_board.getContent()).isNotNull();
+                    assertThat(_board.getRegDate()).isNotNull();
+                });
     }
-
-    @Disabled
-    @Order(1)
-    @DisplayName("게시글 한건 추가")
+    @DisplayName("존재하지 않는 게시글 한건 조회")
+    @ParameterizedTest
+    @ValueSource(longs = {100000000L, 9999999L})
+    void test2_2(long id) {
+        // given
+        // when
+        Board board = boardService.findById(id);
+        // then
+        assertThat(board) .isNull();
+    }
+    @DisplayName("게시글 등록")
     @Test
-    public void test4() {
-        long id = 61;
-        String memberId = "kamsayoyo";
-
+    void test3() {
+        // given
+        // when
+        // pk : seq_board_id를 통해 채번
+        // read_count : 기본값 처리
+        // reg_date :  기본값 처리
         BoardVo board = new BoardVo();
         board.setTitle("제목");
         board.setContent("내용");
 
         int result = boardService.insertBoard(board);
-        assertThat(result).isEqualTo(1);
-
-        Board board2 = boardService.findById(id);
-        assertThat(board2).isNotNull();
-        assertThat(board2.getId()).isNotNull();
-        assertThat(board2.getMemberId()).isNotNull();
+        // then
+        assertThat(result).isGreaterThan(0);
     }
-
-    @Disabled
-    @Order(2)
     @DisplayName("게시글 수정")
-    @Test
-    public void test5() {
-        long id = 61;
+    @ParameterizedTest
+    @MethodSource("boardIdProvider") // boardIdProvider메소드가 반환하는 stream객체의 요소별로 테스트실행
+    void test4(long id) {
+        // given
         BoardVo board = boardService.findById(id);
-
-        String newTitle = board.getTitle() + "(수정)";
-        String newContent = "반갑습니다";
-
+        assertThat(board).isNotNull();
+        // when
+        String newTitle = "새 제목";
+        String newContent = "새 내용";
         board.setTitle(newTitle);
         board.setContent(newContent);
-
         int result = boardService.updateBoard(board);
+        // then
         assertThat(result).isGreaterThan(0);
-
-        Board board2 = boardService.findById(id);
-        assertThat(board2.getTitle()).isEqualTo(newTitle);
-        assertThat(board2.getContent()).isEqualTo(newContent);
-
+        Board boardUpdated = boardService.findById(id);
+        assertThat(boardUpdated).satisfies((b) -> {
+            assertThat(b.getTitle()).isEqualTo(newTitle);
+            assertThat(b.getContent()).isEqualTo(newContent);
+        });
     }
-
-    @Disabled
-    @Order(3)
     @DisplayName("게시글 삭제")
-    @Test
-    public void test6() {
-        long id = 61;
+    @ParameterizedTest
+    @MethodSource("boardIdProvider")
+    void test5(long id) {
+        // given
         Board board = boardService.findById(id);
         assertThat(board).isNotNull();
-
+        // when
         int result = boardService.deleteBoard(id);
+        // then
         assertThat(result).isGreaterThan(0);
-
-        Board board2 = boardService.findById(id);
-        assertThat(board2).isNull();
+        Board boardDeleted = boardService.findById(id);
+        assertThat(boardDeleted).isNull();
     }
-
-    @DisplayName("게시글은 10건씩 조회될 수 있어야 된다.")
+    @DisplayName("전체 게시글수 조회")
+    @Test
+    void test6() {
+       // given
+       // when
+       int totalCount = boardService.getTotalCount();
+       // then
+       assertThat(totalCount).isNotNegative(); // 음수가 아니어야 한다. 0이상
+    }
+    @DisplayName("게시글 페이징 조회")
     @ParameterizedTest
-    @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9})
-    public void test7(int page) {
-        assertThat(page).isGreaterThan(0);
-        System.out.println(page);
-
-        int limit = 10;
+    @MethodSource("pageNoProvider")
+    void test7(int page) {
         Map<String, Object> param = Map.of("page", page, "limit", limit);
         List<BoardVo> boards = boardService.findAll(param);
-
-        System.out.println(boards);
-        assertThat(boards).isNotNull();
-        assertThat(boards.size()).isLessThanOrEqualTo(limit);
+        assertThat(boards)
+                .isNotNull()
+                .isNotEmpty()
+                .size().isLessThanOrEqualTo(limit);
     }
 
-    @DisplayName("전체 게시글 수가 정상 조회된다")
-    @Test
-    public void test8() {
+    public static Stream<Integer> pageNoProvider() {
+        BoardService boardService = new BoardService();
+        SqlSession session = getSqlSession();
         int totalCount = boardService.getTotalCount();
-        System.out.println(totalCount);
-        assertThat(totalCount).isGreaterThanOrEqualTo(0);
+        int totalPage = (int) Math.ceil((double) totalCount / limit);
+        return IntStream.range(1, totalPage).boxed(); // 1 부터 total페이지까지를 요소로 하는 Stream생성
     }
+    public static Stream<Arguments> boardIdProvider() {
+		BoardService boardService = new BoardService(); // non-static fixture를 사용할 수 없다.
+        List<Board> boards = boardService.findAll();
+		return Stream.of(Arguments.arguments(boards.get(0).getId()));
+	}
 
 }

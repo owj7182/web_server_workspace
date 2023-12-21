@@ -5,14 +5,14 @@
         - requestScope
         - sessionScope
         - applicationScope
-    - 사용자 입력값(맵)
+    - 사용자입력값(맵)
         - param
         - paramValues
     - header정보(맵)
         - header
         - headerValues
     - 쿠키 cookie(맵)
-    - pageContext객체 직접 접근(포인터) : @{pageContext.request.contextPath}
+    - pageContext PageContext객체 직접 접근 (포인터) : ${pageContext.request.contextPath}
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -32,30 +32,29 @@
                 <li>${hobbies[2]}</li>
                 <li>${hobbies[3]}</li>
                 <li>${hobbies[4]}</li>
-                <li>${hobbies[5]}</li>
             </ul>
         </li>
-        <li>책/가격 : ${bookMap}</li>
-        <ul>
-            <li>${bookMap.MyJava}</li>
-            <li>${bookMap["정신이 나가기전"]}</li>
-            <li>${bookMap["Dr.zang\'s office"]}</li>
-        </ul>
+        <li>책/가격 : ${bookMap}
+            <ul>
+                <li>${bookMap.MyJava}</li>
+                <li>${bookMap["정신이 나가기전"]}</li>
+                <li>${bookMap["Dr.zang\'s office"]}</li>
+            </ul>
+        </li>
     </ul>
 
-    <h2>사용자 입력값</h2>
+    <h2>사용자입력값</h2>
     <ul>
         <li>name : ${param.name}</li>
         <li>option1 : ${paramValues.option[0]}</li>
         <li>option2 : ${paramValues.option[1]}</li>
-        <li>name : ${param.name}</li>
-        <li>name : ${param.name}</li>
     </ul>
 
     <h2>헤더값</h2>
     <ul>
         <li>User-Agent : ${header['User-Agent']}</li>
     </ul>
+
 
 </body>
 </html>

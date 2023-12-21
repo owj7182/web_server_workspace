@@ -16,8 +16,7 @@ public class Member {
     private int point;
     private LocalDate regDate;
 
-    public Member() {
-    }
+    public Member() {}
 
     public Member(String id, String password, String name, Role role, Gender gender, LocalDate birthday, String email, String phone, List<String> hobby, int point, LocalDate regDate) {
         this.id = id;
@@ -132,7 +131,7 @@ public class Member {
                 ", birthday=" + birthday +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
-                ", hobby='" + hobby +
+                ", hobby=" + hobby +
                 ", point=" + point +
                 ", regDate=" + regDate +
                 '}';

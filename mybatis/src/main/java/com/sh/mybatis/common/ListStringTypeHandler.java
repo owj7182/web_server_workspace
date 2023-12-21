@@ -5,10 +5,7 @@ import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
 
-import java.sql.CallableStatement;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,10 +15,9 @@ import java.util.List;
  */
 @MappedTypes(List.class)
 @MappedJdbcTypes(JdbcType.VARCHAR)
-
 public class ListStringTypeHandler extends BaseTypeHandler<List<String>> {
     /**
-     * List요소를 꺼내서, 기준으로 연결해 하나의 문자열 반환
+     * List요소를 꺼내서 ,기준으로 연결해 하나의 문자열 반환
      * @param preparedStatement
      * @param i
      * @param strings
@@ -31,7 +27,7 @@ public class ListStringTypeHandler extends BaseTypeHandler<List<String>> {
     @Override
     public void setNonNullParameter(PreparedStatement preparedStatement, int i, List<String> strings, JdbcType jdbcType) throws SQLException {
         String value = "";
-        for(int j = 0; j < strings.size(); j++){
+        for(int j = 0; j < strings.size(); j++) {
             String v = strings.get(j);
             value += v;
             if(j != strings.size() - 1)
@@ -46,7 +42,7 @@ public class ListStringTypeHandler extends BaseTypeHandler<List<String>> {
         if(value != null) {
             return Arrays.asList(value.split(","));
         }
-        return null;
+		return null;
     }
 
     @Override
@@ -55,7 +51,7 @@ public class ListStringTypeHandler extends BaseTypeHandler<List<String>> {
         if(value != null) {
             return Arrays.asList(value.split(","));
         }
-        return null;
+		return null;
     }
 
     @Override
@@ -64,6 +60,6 @@ public class ListStringTypeHandler extends BaseTypeHandler<List<String>> {
         if(value != null) {
             return Arrays.asList(value.split(","));
         }
-        return null;
+		return null;
     }
 }

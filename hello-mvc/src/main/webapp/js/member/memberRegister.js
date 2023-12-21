@@ -6,27 +6,28 @@ hobbyEtc.addEventListener('keyup', (e) => {
         // console.log(e.target.innerHTML); // 값<br><br>
         e.target.innerHTML = e.target.innerHTML.replace(/<br>/g, '');
         e.target.blur();
-    }
+   } 
 });
 hobbyEtc.addEventListener('blur', (e) => {
-   const value = e.target.innerHTML;
-   if(value && value != '직접입력') {
+    const value = e.target.innerHTML;
+    if(value && value != '직접입력') {
        const html = `
-     <div class="inline-flex items-center mr-4">
-        <input id="hobby-${value}" type="checkbox" name="hobby" value="${value}" checked class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" >
-        <label for="hobby-${value}" class="ms-2 text-sm font-medium text-gray-900">${value}</label>
-    </div>`;
-       // 특정요소 기준으로 새 요소 추가
-       // - beforebegin 시작 태그 앞. 이전 형제 요소 추가
-       // - afterbegin 시작 태그 뒤. 첫 자식 요소로 추가
-       // - beforeend 종료 태그 앞. 마지막 자식 요소로 추가
-       // - afterend 종료 태그 뒤. 다음 형제요소로 추가
-       // e.target.parentElement : label#hobby-etc를 감싼 div태그
+            <div class="inline-flex items-center mr-5">
+              <input id="hobby-${value}" type="checkbox" name="hobby" value="${value}" checked class="w-5 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" >
+              <label for="hobby-${value}" class="ms-3 text-sm font-medium text-gray-900">${value}</label>
+            </div>`;
+        // 특정요소기준으로 새요소 추가
+        // - beforebegin 시작태그앞. 이전 형제요소로 추가
+        // - afterbegin 시작태그뒤. 첫 자식요소로 추가
+        // - beforeend 종료태그앞. 마지막 자식요소로 추가
+        // - afterend 종료태그뒤. 다음 형제요소로 추가
+        // e.target.parentElement : label#hobby-etc를 감싼 div태그
+        e.target.parentElement.insertAdjacentHTML('beforebegin', html);
+        e.target.innerHTML = '직접입력';
+    }
 
-       e.target.parentElement.insertAdjacentHTML('beforebegin', html);
-       e.target.innerHTML = '직접입력';
-   }
 });
+
 
 /**
  * 회원가입 유효성검사

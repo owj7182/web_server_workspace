@@ -23,42 +23,40 @@ public class MemberUpdateServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // 1. 인코딩 설정
+        // 1. 인코딩설정
 //        req.setCharacterEncoding("utf-8");
-
-        // 2. 사용자 입력값 가져오기
+        // 2. 사용자입력값 가져오기
 //        String id = req.getParameter("id");
-        Member loginMember = (Member) req.getSession().getAttribute("loginMember"); // 로그인했을때 있던 값을 가져옴
+        Member loginMember = (Member) req.getSession().getAttribute("loginMember");
         String id = loginMember.getId();
-
         String name = req.getParameter("name");
         String _birthday = req.getParameter("birthday");
         String email = req.getParameter("email");
         String phone = req.getParameter("phone");
         String _gender = req.getParameter("gender");
-        String[] _hobby = req. getParameterValues("hobby");
-        System.out.println(id + ", " + ", " + name + ", " + _birthday + ", " + email + ", " + phone + ", " + _gender + ", " + _hobby);
-
+        String[] _hobby = req.getParameterValues("hobby");
+        
         // input:date는 text계열이라 작성하지 않아도 ""이 전송
-        LocalDate birthday =
-                _birthday != null && !"".equals(_birthday) ?
-                        LocalDate.parse(_birthday, DateTimeFormatter.ISO_DATE) :
+        LocalDate birthday = _birthday != null && !"".equals(_birthday) ?
+                LocalDate.parse(_birthday, DateTimeFormatter.ISO_DATE) :
+                    null;
+        Gender gender = _gender != null ?
+                    Gender.valueOf(_gender) :
                         null;
-
-        Gender gender = _gender != null ? Gender.valueOf(_gender) : null;
-        List<String> hobby = _hobby != null ? Arrays.asList(_hobby) : null;
-
+        List<String> hobby = _hobby != null ?
+                    Arrays.asList(_hobby) :
+                        null;
         Member member = new Member(id, null, name, null, gender, birthday, email, phone, hobby, 0, null);
         System.out.println(member);
 
         // 3. 업무로직
         int result = memberService.updateMember(member);
-
-        // db정보가 성공적으로 수정되었다면, 해당 내용으로 session속성 loginMember업데이트
+        // db정보가 성공적으로 수정되었다면, 해당내용으로 session속성 loginMember업데이트
         Member memberUpdated = memberService.findById(id);
         req.getSession().setAttribute("loginMember", memberUpdated);
 
         // 4. redirect : /mvc/member/memberDetail
         resp.sendRedirect(req.getContextPath() + "/member/memberDetail");
+
     }
 }

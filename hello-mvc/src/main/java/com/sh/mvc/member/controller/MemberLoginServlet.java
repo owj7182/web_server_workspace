@@ -52,7 +52,7 @@ public class MemberLoginServlet extends HttpServlet {
         String referer = req.getHeader("Referer");
         System.out.println("referer = " + referer);
 
-        if(!referer.contains("/member/meberLogin"))
+        if(!referer.contains("/member/memberLogin"))
             req.getSession().setAttribute("next", referer);
 
 

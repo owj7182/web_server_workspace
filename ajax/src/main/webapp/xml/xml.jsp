@@ -12,6 +12,9 @@
             border: 1px solid #000;
             padding: 5px;
         }
+        table img {
+            width: 200px;
+        }
     </style>
 </head>
 <body>
@@ -22,6 +25,19 @@
             <th>주제</th>
             <th>제목</th>
             <th>저자</th>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <button id="btn-celeb">Celeb 확인</button>
+    <table id="celebs">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Profile</th>
+                <th>Name</th>
+                <th>Type</th>
+            </tr>
         </thead>
         <tbody></tbody>
     </table>

@@ -30,3 +30,37 @@ document.querySelector("#btn1").onclick = () => {
 
     })
 }
+
+document.querySelector("#btn-celeb").addEventListener('click', (e) => {
+    $.ajax({
+        url : `${contextPath}/xml/celeb/findAll`,
+        method : "get",
+        dataType : "xml",
+        success(xmlDoc) {
+            console.log(xmlDoc);
+            const tbody = document.querySelector("#celebs tbody");
+            tbody.innerHTML = ''; // 초기화
+
+            const root = xmlDoc.querySelector(":root");
+            console.dir(root) // <celeb></celeb>
+
+            const celebs = xmlDoc.querySelectorAll("Celeb")
+            celebs.forEach((celeb) => {
+                console.log(celeb);
+                const [id, name, profile, type] = celeb.children;
+                console.log(id, name, profile, type);
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${id.textContent}</td>
+                        <td>
+                            <img src="${contextPath}/images/celeb/${profile.textContent}" alt="">
+                        </td>
+                        <td>${name.textContent}</td>
+                        <td>${type.textContent}</td>
+                    </tr>
+                `;
+            })
+
+        }
+    })
+});

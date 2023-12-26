@@ -414,7 +414,7 @@ start with
 connect by 
     parent_comment_id = prior id;
 
-
+select * from  board_comment;
 
 
 

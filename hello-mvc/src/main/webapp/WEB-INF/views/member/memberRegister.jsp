@@ -18,9 +18,13 @@
                     회원정보 입력
                 </h1>
                 <form name="memberRegisterFrm" method="post" class="space-y-4 md:space-y-6">
-                    <div>
+                    <div class="relative">
                         <label for="id" class="block mb-2 text-sm font-medium text-gray-900 after:content-['*'] after:ml-0.5 after:text-red-500">아이디</label>
                         <input type="text" name="id" id="id" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" value="sejong" required>
+                        <span class="guide ok text-green-700 absolute hidden top-10 end-1">이 아이디는 사용가능합니다.</span>
+                        <span class="guide error text-red-700 absolute hidden top-10 end-1">이 아이디는 이미 사용중입니다.</span>
+                        <%-- idValid=1 사용가능한 아이디, idValid=0 사용불가한 아이디 --%>
+                        <input type="hidden" id="idValid" value="0">
                     </div>
                     <div>
                         <label for="password" class="block mb-2 text-sm font-medium text-gray-900 after:content-['*'] after:ml-0.5 after:text-red-500">비밀번호</label>

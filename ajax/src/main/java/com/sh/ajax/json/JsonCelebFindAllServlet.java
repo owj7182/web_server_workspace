@@ -18,10 +18,10 @@ public class JsonCelebFindAllServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // 1. 사용자 입력값 처리
+        // 1. 사용자입력값처리
         // 2. 업무로직
         List<Celeb> celebs = celebService.findAll();
-        // 3. 응답처리 : 자바 컬렉션 데이터를 json으로 변환 후 출력 by gson
+        // 3. 응답처리 : 자바컬렉션데이터를 json으로 변환후 출력 by gson
         resp.setContentType("application/json; charset=utf-8");
 //        String jsonData = new Gson().toJson(celebs);
 //        System.out.println(jsonData);

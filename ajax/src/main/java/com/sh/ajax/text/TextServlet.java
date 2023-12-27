@@ -13,7 +13,7 @@ public class TextServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // 1. 사용자 입력값
+        // 1. 사용자입력값
         String name = req.getParameter("name");
         int num = Integer.parseInt(req.getParameter("num"));
         System.out.println("name = " + name);
@@ -21,7 +21,7 @@ public class TextServlet extends HttpServlet {
 
         // 2. 업무로직
         if((int)(Math.random() * 2) == 0)
-            throw new RuntimeException("에러가 발생했습니다");
+            throw new RuntimeException("에러가 발생했습니다.");
 
         // 3. 응답 출력
         resp.setContentType("text/plain; charset=utf-8");

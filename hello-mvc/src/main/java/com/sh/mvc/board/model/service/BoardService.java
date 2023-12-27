@@ -21,13 +21,14 @@ public class BoardService {
         session.close();
         return boards;
     }
+
     public BoardVo findById(long id, boolean hasRead) {
         SqlSession session = getSqlSession();
         BoardVo board = null;
         int result = 0;
         try {
             // 조회수 증가처리
-            if(!hasRead)
+            if (!hasRead)
                 result = boardDao.updateBoardReadCount(session, id);
 
             // 조회
@@ -40,7 +41,7 @@ public class BoardService {
             session.rollback();
             throw e;
         } finally {
-           session.close();
+            session.close();
         }
 //        BoardVo board = boardDao.findById(session, id); // select * from board where id = ?
 //        Member member = memberDao.findById(session, board.getMemberId()); // select * from member where id = ?
@@ -53,6 +54,7 @@ public class BoardService {
 
     /**
      * 조회수 상관없이 게시글 조회해야 하는 경우
+     *
      * @param id
      * @return
      */
@@ -77,7 +79,7 @@ public class BoardService {
             System.out.println("BoardService#insertBoard : board#id = " + board.getId());
             // attachment 테이블에 등록
             List<Attachment> attachments = board.getAttachments();
-            if(!attachments.isEmpty()) {
+            if (!attachments.isEmpty()) {
                 for (Attachment attach : attachments) {
                     attach.setBoardId(board.getId()); // fk boardId 필드값 대입
                     result = boardDao.insertAttachment(session, attach);
@@ -103,16 +105,16 @@ public class BoardService {
 
             // attachment테이블 삭제
             List<Long> delFiles = board.getDelFiles();
-            if(!delFiles.isEmpty()) {
-                for(Long id : delFiles) {
-                   result = boardDao.deleteAttachment(session, id);
+            if (!delFiles.isEmpty()) {
+                for (Long id : delFiles) {
+                    result = boardDao.deleteAttachment(session, id);
                 }
             }
-            
+
             // attachment테이블 등록
             List<Attachment> attachments = board.getAttachments();
-            if(!attachments.isEmpty()) {
-                for(Attachment attach : attachments) {
+            if (!attachments.isEmpty()) {
+                for (Attachment attach : attachments) {
                     attach.setBoardId(board.getId()); // fk 등록
                     result = boardDao.insertAttachment(session, attach);
                 }
@@ -166,7 +168,22 @@ public class BoardService {
         } catch (Exception e) {
             session.rollback();
             throw e;
-        }finally {
+        } finally {
+            session.close();
+        }
+        return result;
+    }
+
+    public int deleteBoardComment(long id) {
+        int result = 0;
+        SqlSession session = getSqlSession();
+        try {
+            result = boardDao.deleteBoardComment(session, id);
+            session.commit();
+        } catch (Exception e) {
+            session.rollback();
+            throw e;
+        } finally {
             session.close();
         }
         return result;

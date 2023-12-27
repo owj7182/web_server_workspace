@@ -5,6 +5,7 @@ import com.sh.ajax.celeb.model.entity.Celeb;
 import com.sh.ajax.celeb.model.entity.Type;
 import com.sh.ajax.celeb.model.service.CelebService;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
@@ -41,12 +42,12 @@ public class JsonCelebRegisterServlet extends HttpServlet {
             Map<String, List<FileItem>> fileItemMap = servletFileUpload.parseParameterMap(req); // throw FileUploadException
             // 텍스트처리
             String name = fileItemMap.get("name").get(0).getString("utf-8"); // List<FileItem> -> FileItem -> 실제값
-            Type type = Type.valueOf(fileItemMap.get("type").get(0).getString("utf-8")); // List<FileItem> -> FileItem -> 실제값 -> enum으로 변환
+            Type type = Type.valueOf(fileItemMap.get("type").get(0).getString("utf-8")); // List<FileItem> -> FileItem -> 실제값 -> enum으로 변환 
             celeb.setName(name);
             celeb.setType(type);
             // 파일처리
             FileItem profileFileItem = fileItemMap.get("profile").get(0);
-            if (profileFileItem.getSize() > 0) {
+            if(profileFileItem.getSize() > 0) {
                 // 파일명 가져오기
                 String profile = profileFileItem.getName(); // 사용자가 업로드한 파일명
                 celeb.setProfile(profile);
@@ -54,18 +55,22 @@ public class JsonCelebRegisterServlet extends HttpServlet {
                 profileFileItem.write(new File(repository, profile)); // throw Exception
             }
         } catch (Exception e) {
-            throw  new RuntimeException(e);
+            throw new RuntimeException(e);
         }
         System.out.println(celeb);
 
         // 2. 업무로직
         int result = celebService.insertCeleb(celeb);
 
-        // 3. 비동기로 요청 시 redirect 없음(적절한 json 답처리)
-        // 사용자메세지
+        // 3. 비동기 요청시 리다이렉트 없음. 적절한 json응답처리
+        // 사용자메세징
         Map<String, Object> resultMap = Map.of("msg", "정상등록되었습니다. 😜");
 
         resp.setContentType("application/json; charset=utf-8");
         new Gson().toJson(resultMap, resp.getWriter());
+
     }
 }
+
+
+

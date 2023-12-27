@@ -5,5 +5,5 @@ public enum Type {
     SINGER,
     MODEL,
     ENTERTAINER,
-    COMEDIAN
+    COMEDIAN;
 }

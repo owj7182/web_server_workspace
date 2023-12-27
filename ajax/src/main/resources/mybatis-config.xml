@@ -13,15 +13,8 @@
   </settings>
 
   <typeAliases>
-<!--    <typeAlias type="com.sh.mvc.member.model.entity.Member" alias="member"/>-->
-    <!--
-      package 하위 모든 클래스가 소문자로 시작되는 별칭으로 등록
-      - Member -> member
-      - MemberAddress -> memberAddress
-    -->
     <package name="com.sh.ajax"/>
   </typeAliases>
-
 
   <environments default="development">
     <environment id="development">

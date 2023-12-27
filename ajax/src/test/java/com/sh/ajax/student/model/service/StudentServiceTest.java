@@ -12,17 +12,16 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
-
- 테스트항목
- fixture 자체테스트
- 학생이름 검색
- "이" 검색시 이민정, 이재준
- "진" 고혜진, 오우진, 정진우, 천무진
- "한" 한보경, 한승훈, 한준희
+ * 테스트항목
+ * - fixture 자체테스트
+ * - 학생이름 검색
+ * - "이" 검색시 이민정, 이재준
+ * - "진" 고혜진, 오우진, 정진우, 천무진
+ * - "한" 한보경, 한승훈, 한준희
  *
- @ParameterizedTest
- @ValueSource
- 사용해볼것!
+ * @ParameterizedTest
+ * @ValueSource
+ * 사용해볼것!
  */
 public class StudentServiceTest {
     // fixture
@@ -52,8 +51,8 @@ public class StudentServiceTest {
         assertThat(students)
                 .isNotNull()
                 .allSatisfy((student) -> {
-                    assertThat(student.getId()).isNotNull().isNotZero();
-                    assertThat(student.getName()).isNotNull().contains(name);
+                   assertThat(student.getId()).isNotNull().isNotZero();
+                   assertThat(student.getName()).isNotNull().contains(name);
                 });
     }
 

@@ -42,6 +42,12 @@
                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">${board.id}</th>
                    <td class="px-6 py-4">
                        <a href="${pageContext.request.contextPath}/board/boardDetail?id=${board.id}" class="hover:underline">${fn:escapeXml(board.title)}</a>
+                       <c:if test="${board.commentCount ge 10}">
+                         <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">${board.commentCount}</span>
+                       </c:if>
+                       <c:if test="${board.commentCount gt 0 && board.commentCount lt 10}">
+                         <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/10">${board.commentCount}</span>
+                       </c:if>
                    </td>
                    <td class="px-6 py-4">${board.memberId}</td>
                    <td class="px-6 py-4">

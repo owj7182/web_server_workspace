@@ -8,8 +8,9 @@
             *
         from
             celeb
+        order by
+            id desc
     </select>
-
     <select id="findById" resultType="celeb">
         select
             *
@@ -18,7 +19,6 @@
         where
             id = #{id}
     </select>
-
     <insert id="insertCeleb">
         insert into
             celeb
@@ -35,24 +35,20 @@
                 dual
         </selectKey>
     </insert>
-
     <update id="updateCeleb">
         update
             celeb
         set
-            name = #{name},
+            name    = #{name},
             profile = #{profile},
-            type = #{type}
+            type    = #{type}
         where
             id = #{id}
     </update>
-
     <delete id="deleteCeleb">
-        delete
-        from
+        delete from
             celeb
         where
             id = #{id}
     </delete>
-
 </mapper>

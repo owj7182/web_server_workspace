@@ -13,18 +13,19 @@ import java.util.List;
 
 @WebServlet("/xml/celeb/findAll")
 public class XmlCelebFindAllServlet extends HttpServlet {
+    
     private CelebService celebService = new CelebService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // 1. 사용자 입력값 처리
-
+        // 1. 사용자입력값 처리
+        
         // 2. 업무로직
         List<Celeb> celebs = celebService.findAll();
         System.out.println(celebs);
         req.setAttribute("celebs", celebs);
 
         // 3. view단 처리 (jsp를 이용해서 xml 동적생성)
-        req.getRequestDispatcher("/WEB-INF/views/xml/celeb.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/xml/celeb.jsp").forward(req,resp);
     }
 }

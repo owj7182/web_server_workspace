@@ -1,40 +1,45 @@
+/**
+ * $.ajax
+ *
+ */
 document.querySelector("#btn1").addEventListener("click", (e) => {
     $.ajax({
-        url: `${contextPath}/text`,
-        method: "get",
-        data: {
-            name: "홍길동",
-            num: 123
+        url : `${contextPath}/text`,
+        method : "get",
+        data : {
+          name : "홍길동",
+          num : 123
         },
-        dataType: "text",
+        dataType : "text",
         beforeSend() {
             console.log('beforeSend');
         },
-        success(response) {
+        success(response){
+            console.log('success');
             console.log(response);
-            console.log("success");
         },
-        error(jqXHP, textStatus, errorThrown) {
+        error(jqXHR, textStatus, errorThrown) {
             console.log('error');
-            console.log(jqXHP, textStatus, errorThrown);
+            console.log(jqXHR, textStatus, errorThrown);
         },
         complete() {
-            console.log('complete')
+            console.log('complete');
         }
 
     });
 });
 
 
-$( "#studentSearch" ).autocomplete({
-    source(request, callback) {
-        // console.log(request);
-        // console.log(callback); // 콜백함수
+$("#studentSearch").autocomplete({
+  source(request, callback) {
+      // console.log(request);
+      // console.log(callback); // 콜백함수
+
       $.ajax({
           url : `${contextPath}/text/studentSearch`,
-          method: 'get',
-          data: request,
-          dataType: 'text',
+          method : 'get',
+          data : request,
+          dataType : 'text',
           success(response) {
               console.log(response);
               /*
@@ -49,21 +54,21 @@ $( "#studentSearch" ).autocomplete({
               if(response) {
                   const temp = response.split("\r\n");
                   const students = temp.map((student) => {
-                      const [id, name] = student.split(',');
-                      return {
-                          label : `${name}(${id})`,
-                          value : id
-                      };
+                     const [id, name] = student.split(',');
+                     return {
+                       label : `${name}(${id})`,
+                       value : id
+                     };
                   });
                   console.log(students);
-                  callback(students); // jqueryui#autocomplete에 전달. 화면자동으로 랜더
+                  callback(students); // jqueryui#autocomplete에 전달. 화면자동으로 렌더.
               }
           }
       });
-    },
-    select(e, selected) {
-        console.log(e, selected);
-        const {item : {value}} = selected;
-        location.href = `${contextPath}/student/studentDetail?id=${value}`;
-    }
+  },
+  select(e, selected) {
+      console.log(e, selected);
+      const {item : {value}} = selected;
+      location.href = `${contextPath}/student/studentDetail?id=${value}`;
+  }
 });

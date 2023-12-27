@@ -18,14 +18,12 @@ public class JsonCelebFindByIdServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // 1. 사용자 입력값 처리
-        Long id = Long.parseLong(req.getParameter("id"));
-        System.out.println("도착");
+        long id = Long.parseLong(req.getParameter("id"));
         System.out.println(id);
-
         // 2. 업무로직
         Celeb celeb = celebService.findById(id);
-
-        // 3. 응답처리(json)
+        System.out.println(celeb);
+        // 3. 응답처리 (json)
         resp.setContentType("application/json; charset=utf-8");
         new Gson().toJson(celeb, resp.getWriter());
     }

@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SqlSessionTest {
 
     @Test
-    public void test() {
+    public void test(){
         SqlSession session = getSqlSession();
         assertThat(session).isNotNull();
     }

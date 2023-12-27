@@ -54,7 +54,7 @@ public class Celeb {
         return "Celeb{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", Profile='" + profile + '\'' +
+                ", profile='" + profile + '\'' +
                 ", type=" + type +
                 '}';
     }

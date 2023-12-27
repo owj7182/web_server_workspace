@@ -3,7 +3,10 @@ package com.sh.ajax.celeb.model.dao;
 import com.sh.ajax.celeb.model.entity.Celeb;
 import com.sh.ajax.celeb.model.entity.Type;
 import org.apache.ibatis.session.SqlSession;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -91,7 +94,6 @@ public class CelebDaoTest {
     }
 
     @DisplayName("Celeb 등록")
-    @Order(1)
     @ParameterizedTest
     @CsvSource({"홍길동,honggd.jpg,SINGER", "신사임당,sinsa.jpg,MODEL"})
     void test4(String name, String profile, Type type) {
@@ -107,7 +109,7 @@ public class CelebDaoTest {
         int result = celebDao.insertCeleb(session, celeb);
         // then
         assertThat(result).isGreaterThan(0);
-        Long id = celeb.getId();
+        Long id = celeb.getId(); // <selectKey>로 처리된 값 가져오기
         assertThat(id).isNotNull().isNotZero();
         Celeb celebInserted = celebDao.findById(session, id);
         assertThat(celebInserted)
@@ -120,9 +122,7 @@ public class CelebDaoTest {
                 });
     }
 
-//    @Disabled
     @DisplayName("Celeb 수정")
-    @Order(2)
     @ParameterizedTest
     @MethodSource("celebIdProvider")
     void test5(Long id) {
@@ -148,9 +148,7 @@ public class CelebDaoTest {
 
     }
 
-//    @Disabled
     @DisplayName("Celeb 삭제")
-    @Order(3)
     @ParameterizedTest
     @MethodSource("celebIdProvider")
     void test6(Long id) {
